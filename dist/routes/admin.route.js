@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { AddCategorySchema, AddItemSchema } from "../utils/validators/admin.validation";
-import { validate } from "../utils/middlewares/zodValidate.middleware";
-import { addCategory, addItem, getAllCategory, getAllItems } from "../controllers/admin.controller";
-import { authenticateJWT, authorizeRoles } from "../utils/middlewares/auth.middleware";
+import { AddCategorySchema, AddItemSchema } from "../utils/validators/admin.validation.js";
+import { validate } from "../utils/middlewares/zodValidate.middleware.js";
+import { addCategory, addItem, getAllCategory, getAllItems } from "../controllers/admin.controller.js";
+import { authenticateJWT, authorizeRoles } from "../utils/middlewares/auth.middleware.js";
 // admin Router
 const adminRouter = Router();
 // add Category 

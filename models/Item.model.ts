@@ -1,5 +1,5 @@
 import mongoose,{Schema,Model,Types} from "mongoose";
-import {Item} from "../types/TypeDef";
+import {Item} from "../types/TypeDef.js";
 
 const itemSchema:Schema<Item>=new mongoose.Schema({
     itemName:{type:String,required:true,unique:true,trim:true},
