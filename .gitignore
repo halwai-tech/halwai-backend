@@ -1,9 +1,7 @@
 # Node modules
 node_modules/
 
-# Output folders
-# dist/
-# build/
+
 
 # Environment variables
 .env
@@ -33,6 +31,4 @@ Thumbs.db
 # Coverage reports
 coverage/
 
-# Optional: ignore compiled JS if you're tracking only TS
-*.js
-*.js.map
+
