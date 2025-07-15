@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import Category from "../models/Category.model";
-import Item from "../models/Item.model";
+import Category from "../models/Category.model.js";
+import Item from "../models/Item.model.js";
 
 // Adding New Category
 export const addCategory = async (req: Request, res: Response) => {
