@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import User from "../models/User.model";
+import User from "../models/User.model.js";
 import bcrypt from "bcrypt";
-import {generateToken} from "../utils/generateToken";
+import {generateToken} from "../utils/generateToken.js";
 import { Types } from "mongoose";
 export const register = async (req: Request, res: Response): Promise<void> => {
   try {
