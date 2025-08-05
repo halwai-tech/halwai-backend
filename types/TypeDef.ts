@@ -42,7 +42,8 @@ export interface IBookedItem{
 
 // IEventBooking interface for Halwai Booking for Event
 export interface IEventBooking extends Document{
-    eventName:string;
+    
+  eventId: Types.ObjectId;
     eventDate:Date;
     servingTime:string;
     numberOfPersons:number;
@@ -61,4 +62,14 @@ export interface IEventBooking extends Document{
     venueAddress:string;
 
 
+}
+
+export interface IEvent extends Document {
+  eventName: string;
+  description?: string;
+  image?: string;
+  categories: Types.ObjectId[]; // Many-to-many
+  tags?: string[];
+  createdAt?: Date;
+  updatedAt?: Date;
 }

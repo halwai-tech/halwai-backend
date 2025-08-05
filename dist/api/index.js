@@ -6,6 +6,7 @@ const app = express();
 import authRoute from "../routes/auth.route.js";
 import adminRoute from "../routes/admin.route.js";
 import usersRouter from "../routes/users.route.js";
+import eventBookingRouter from "../routes/eventBooking.route.js";
 dotenv.config();
 app.use(express.json());
 app.use(cors());
@@ -21,6 +22,7 @@ app.get('/', (req, res) => {
 app.use("/api/auth", authRoute);
 app.use("/api/admin", adminRoute);
 app.use("/api/users", usersRouter);
+app.use("/api/event-book", eventBookingRouter);
 // ✅ Local development
 if (process.env.NODE_ENV !== 'production') {
     const PORT = process.env.PORT || 5000;
