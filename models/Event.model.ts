@@ -1,4 +1,4 @@
-// models/event.model.ts
+
 
 import mongoose, { Schema, Model } from "mongoose";
 import {IEvent} from "../types/TypeDef.js";

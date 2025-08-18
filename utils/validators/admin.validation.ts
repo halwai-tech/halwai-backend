@@ -3,13 +3,13 @@ import mongoose from "mongoose";
 
 // Add Category Request Validation
 export const AddCategorySchema = z.object({
-  categoryName: z.string().min(2, "Category Name is Too Short!"),
+  eventCategoryName: z.string().min(2, "Category Name is Too Short!"),
+  image:z.string().url("Invalid image URL").optional()
 });
 
 // Add Item Request Vaidation
 export const AddItemSchema=z.object({
      itemName:z.string().min(1,"Item name is required!").trim(),
-     category:z.string().refine((val)=>mongoose.Types.ObjectId.isValid(val),"Invalid Category ObjectId!"),
      unit:z.enum(["per kg","per piece","per plate"],{
         required_error:"Unit is required!",
         invalid_type_error:"Invalid Unit Type!"
@@ -20,4 +20,59 @@ export const AddItemSchema=z.object({
      }),
      isActive:z.boolean().default(true)
 });
+
+
+
+// Add Event Request Validation
+
+export const AddEventSchema = z.object({
+  eventName: z.string().min(1, "Event name is required").trim(),
+  description: z.string().optional(),
+
+  
+  image: z.string().url("Invalid image URL").optional(),
+
+  categories: z
+    .string()
+    .transform((val) => JSON.parse(val))
+    .pipe(
+      z
+        .array(
+          z.string().refine((val) => val.length === 24, {
+            message: "Each category ID must be a valid 24-character ObjectId",
+          })
+        )
+        .min(1, "At least one category is required")
+    ),
+
+  tags: z
+    .string()
+    .optional()
+    .transform((val) => (val ? JSON.parse(val) : []))
+    .pipe(z.array(z.string().min(1)))
+});
+
+
+// Add Cusine Request Schema
+export const AddCuisineSchema= z.object({
+  name: z
+    .string({
+      required_error: "Cuisine name is required",
+      invalid_type_error: "Name must be a string",
+    })
+    .min(1, "Cuisine name cannot be empty"),
+
+  description: z
+    .string({
+      required_error: "Description is required",
+      invalid_type_error: "Description must be a string",
+    })
+    .min(1, "Description cannot be empty"),
+
+  image: z
+    .string()
+    .url("Image must be a valid URL")
+    .optional(),
+});
+
 

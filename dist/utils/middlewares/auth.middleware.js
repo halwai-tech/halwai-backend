@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 // for authenticating the jwt token at the time of login status check
 export const authenticateJWT = (req, res, next) => {
+    console.log("📥 [Middleware] authenticateJWT called"); // <-- add this
     const authHeader = req.headers.authorization;
     if (!authHeader) {
         res.status(401).json({ msg: "No Token Provided!" });
@@ -9,9 +10,12 @@ export const authenticateJWT = (req, res, next) => {
     // extracting the real token from the authorization header
     const token = authHeader.split(" ")[1];
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-        if (err)
+        if (err) {
+            console.error("❌ JWT verification failed:", err.name, err.message);
             return res.status(403).json({ msg: "Invalid Token!" });
+        }
         req.user = decoded; // You can type this properly by extending Express.Request
+        console.log("Decoded JWT:", decoded);
         next();
     });
 };

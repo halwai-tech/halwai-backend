@@ -1,17 +1,49 @@
-import Category from "../models/Category.model.js";
+import EventCategory from "../models/EventCategory.js";
 import Item from "../models/Item.model.js";
+import Event from "../models/event.model.js";
+import Cuisine from "../models/Cuisine.model.js";
+import { uploadToCloudinary } from "../utils/uploadCloudinary.js";
 // Adding New Category
-export const addCategory = async (req, res) => {
+export const addEventCategory = async (req, res) => {
     try {
-        const { categoryName } = req.body;
-        const category = new Category({
-            categoryName,
+        const { eventCategoryName } = req.body;
+        const file = req.file;
+        if (!file) {
+            res.status(400).json({ message: "Image is required" });
+            return;
+        }
+        // Upload image to cloudinary
+        const uploadResult = await uploadToCloudinary(file.buffer, file.mimetype, "halwai-events-category");
+        const eventCategory = new EventCategory({
+            eventCategoryName,
+            image: uploadResult.secure_url,
         });
-        await category.save();
-        res.status(201).json({ message: "Added New Category Successfully.", data: category });
+        await eventCategory.save();
+        res
+            .status(201)
+            .json({
+            message: "Added New Category Successfully.",
+            data: eventCategory,
+        });
     }
     catch (error) {
-        console.error("Error in Admin Controller: ", error);
+        console.error("Error in Admin Controller: ", error.name, error.message);
+        res.status(500).json({ message: error });
+    }
+};
+// Get All Categories
+export const getAllEventCategory = async (req, res) => {
+    try {
+        const eventCategory = await EventCategory.find({});
+        res
+            .status(200)
+            .json({
+            message: "All Categories Fetched Successfully.",
+            data: eventCategory,
+        });
+    }
+    catch (error) {
+        console.error("Error fetching categories:", error);
         res.status(500).json({ message: error });
     }
 };
@@ -24,29 +56,109 @@ export const addItem = async (req, res) => {
             category,
             unit,
             priceRange,
-            isActive
+            isActive,
         });
         await newItem.save();
-        res.status(201).json({ message: "New Item Added Successfully!", data: newItem });
+        res
+            .status(201)
+            .json({ message: "New Item Added Successfully!", data: newItem });
     }
     catch (error) {
         console.error("Error in admin controller addItem: ", error);
         res.status(500).json({ message: error });
     }
 };
-// get All Category
-export const getAllCategory = async (req, res) => {
-    let category = await Category.find({});
-    res.status(200).json({ message: "All Category Fetched Successfully.", data: category });
-};
-// get all items
+// Get All Items
 export const getAllItems = async (req, res) => {
     try {
         const allItems = await Item.find({});
-        res.status(200).json({ message: "All Items Fetched Succesfully.", data: allItems });
+        res
+            .status(200)
+            .json({ message: "All Items Fetched Successfully.", data: allItems });
     }
     catch (error) {
         console.error("There is an error in admin controller get all items: ", error);
         res.status(500).json({ message: error });
     }
 };
+// Add Event
+export const addEvent = async (req, res) => {
+    try {
+        const { eventName, description, categories, tags } = req.body;
+        const file = req.file;
+        if (!file) {
+            res.status(400).json({ message: "Image is required" });
+            return;
+        }
+        // Upload image to cloudinary
+        const uploadResult = await uploadToCloudinary(file.buffer, file.mimetype, "halwai-events");
+        // Create new event
+        const newEvent = new Event({
+            eventName,
+            description,
+            image: uploadResult.secure_url,
+            categories,
+            tags,
+        });
+        const savedEvent = await newEvent.save();
+        res
+            .status(201)
+            .json({ message: "Event Added Successfully.", data: savedEvent });
+    }
+    catch (error) {
+        console.error("Error adding event:", error);
+        res.status(500).json({ message: "Server error while adding event" });
+    }
+};
+// get all Events
+export const getAllEvents = async (req, res) => {
+    try {
+        const allEvents = await Event.find({});
+        res
+            .status(201)
+            .json({ message: "All Events Fetched Successfully.", data: allEvents });
+    }
+    catch (error) {
+        console.error("There is an error in admin controller get all events: ", error);
+        res.status(500).json({ message: error });
+    }
+};
+// Cuisine Apis start
+// add cuisine api
+export const addCuisine = async (req, res) => {
+    try {
+        const { name, description } = req.body;
+        const file = req.file;
+        if (!file) {
+            res.status(400).json({ message: "Image is required" });
+            return;
+        }
+        // Upload image to cloudinary
+        const uploadResult = await uploadToCloudinary(file.buffer, file.mimetype, "cuisines");
+        const newCuisine = new Cuisine({
+            name,
+            description,
+            image: uploadResult.secure_url,
+        });
+        const savedCuisine = await newCuisine.save();
+        res
+            .status(201)
+            .json({ message: "New Cuisine Added Successfully.", data: savedCuisine });
+    }
+    catch (error) {
+        console.error("Error adding cuisine:", error);
+        res.status(500).json({ message: "Server error while adding cuisine" });
+    }
+};
+// get all cuisines api
+export const getAllCuisines = async (req, res) => {
+    try {
+        const allCuisines = await Cuisine.find({});
+        res.status(201).json({ message: "All Events Fetched Successfully.", data: allCuisines });
+    }
+    catch (error) {
+        console.log("Error in Fetching Cuisines: ", error);
+        res.status(500).json({ message: error });
+    }
+};
+// Cuisine APi end
