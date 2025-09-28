@@ -1,6 +1,7 @@
 import ProfessionalChefEnquiry from "../models/ProfessionalChefEnquiry.model.js";
 import MonthlyChefEnquiry from "../models/MonthlyChefEnquiry.model.js";
 import DomesticChefEnquiry from "../models/DomesticChefEnquiry.model.js";
+import ContactEnquiry from "../models/ContactEnquiry.model.js";
 // Professional Chef Enquiry Start
 export async function addProfessionalChefEnquiry(req, res) {
     try {
@@ -95,3 +96,23 @@ export async function getDomesticChefEnquiry(req, res) {
     }
 }
 // Domestic Chef Enquiry End
+// Submit Contact Form Enquiry Start
+export async function submitContactDetails(req, res) {
+    try {
+        // req.body is already validated by route-level middleware
+        const enquiry = await ContactEnquiry.create(req.body);
+        res.status(200).json({
+            message: "Your message has been received!",
+            enquiry,
+        });
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            res.status(500).json({ error: error.message });
+        }
+        else {
+            res.status(500).json({ error: String(error) });
+        }
+    }
+}
+// Submit Contact Form Enquiry End

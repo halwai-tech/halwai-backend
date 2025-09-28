@@ -17,3 +17,25 @@ export const AddDomesticChefEnquirySchema = z.object({
         invalid_type_error: "WhatsApp must be a string",
     }),
 });
+export const ContactFormSchema = z.object({
+    name: z
+        .string()
+        .min(2, "Name must be at least 2 characters")
+        .max(50, "Name must be at most 50 characters"),
+    email: z
+        .string()
+        .email("Invalid email address"),
+    phone: z
+        .string()
+        .regex(/^\d{10}$/, "Phone number must be exactly 10 digits"),
+    eventDate: z
+        .string()
+        .refine((date) => !isNaN(Date.parse(date)), "Invalid date"),
+    guestCount: z
+        .number()
+        .min(1, "Guest count must be at least 1"),
+    message: z
+        .string()
+        .max(500, "Message must be at most 500 characters")
+        .optional(),
+});

@@ -102,3 +102,15 @@ export interface IDish extends Document {
 export interface IDishCategory extends Document{
   categoryName:string;
 }
+
+// Contact From Enquiry Schema
+export interface IContactEnquiry extends Document {
+  name: string;
+  email: string;
+  phone: string;
+  eventDate: Date;
+  guestCount: number;
+  message?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
