@@ -1,6 +1,6 @@
 import EventCategory from "../models/EventCategory.js";
 import Item from "../models/Item.model.js";
-import Event from "../models/event.model.js";
+import Event from "../models/Event.model.js";
 import Cuisine from "../models/Cuisine.model.js";
 import DishCategory from "../models/DishCategory.model.js";
 import { uploadToCloudinary } from "../utils/uploadCloudinary.js";
