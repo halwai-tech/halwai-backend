@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { DishType } from "../enum";
+import { DishType } from "../enum.js";
 // Add Category Request Validation
 export const AddCategorySchema = z.object({
     eventCategoryName: z.string().min(2, "Category Name is Too Short!"),

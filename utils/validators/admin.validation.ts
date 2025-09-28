@@ -1,6 +1,6 @@
 import { z } from "zod";
 import mongoose from "mongoose";
-import { DishType } from "../enum";
+import { DishType } from "../enum.js";
 
 // Add Category Request Validation
 export const AddCategorySchema = z.object({
