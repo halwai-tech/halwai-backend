@@ -1,4 +1,5 @@
 import { Document, Types } from "mongoose";
+import {DishType} from "../utils/enum.js";
 
 export type UserRole = "admin" | "halwai" | "user";
 
@@ -6,6 +7,7 @@ export type UserRole = "admin" | "halwai" | "user";
 export interface IUser extends Document {
   username: string;
   email: string;
+  phone: string;   
   password: string;
   role: UserRole;
   createdAt: Date;
@@ -79,13 +81,24 @@ export interface ICuisine extends Document {
   updatedAt?: Date;
 }
 
+
+
+// Dish interface for Dish Schema
 export interface IDish extends Document {
   name: string;
-  description: string;
+  cuisine:Types.ObjectId;
+  categories: Types.ObjectId[];
+  ingredients: string[];
+  isVegetarian: DishType;
   price: number;
-  imageUrl: string;
-  isAvailable: boolean;
-  cuisineIds: Types.ObjectId[];
-    createdAt?: Date;
-  updatedAt?: Date;
+  image?: string;
+  description?: string;
+  isRecommended: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// Dish Category interface for DistCategory Schema
+export interface IDishCategory extends Document{
+  categoryName:string;
 }

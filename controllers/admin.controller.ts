@@ -3,8 +3,10 @@ import EventCategory from "../models/EventCategory.js";
 import Item from "../models/Item.model.js";
 import Event from "../models/event.model.js";
 import Cuisine from "../models/Cuisine.model.js";
+import DishCategory from "../models/DishCategory.model.js";
 import { uploadToCloudinary } from "../utils/uploadCloudinary.js";
 
+// ****************** EventCategory Api start
 // Adding New Category
 export const addEventCategory = async (req: Request, res: Response) => {
   try {
@@ -29,12 +31,10 @@ export const addEventCategory = async (req: Request, res: Response) => {
     });
 
     await eventCategory.save();
-    res
-      .status(201)
-      .json({
-        message: "Added New Category Successfully.",
-        data: eventCategory,
-      });
+    res.status(201).json({
+      message: "Added New Category Successfully.",
+      data: eventCategory,
+    });
   } catch (error: any) {
     console.error("Error in Admin Controller: ", error.name, error.message);
     res.status(500).json({ message: error });
@@ -45,18 +45,19 @@ export const addEventCategory = async (req: Request, res: Response) => {
 export const getAllEventCategory = async (req: Request, res: Response) => {
   try {
     const eventCategory = await EventCategory.find({});
-    res
-      .status(200)
-      .json({
-        message: "All Categories Fetched Successfully.",
-        data: eventCategory,
-      });
+    res.status(200).json({
+      message: "All Categories Fetched Successfully.",
+      data: eventCategory,
+    });
   } catch (error) {
     console.error("Error fetching categories:", error);
     res.status(500).json({ message: error });
   }
 };
 
+// ******************* EventCategory Api End
+
+// ****************  Item Api start
 // Adding New Item
 export const addItem = async (req: Request, res: Response) => {
   try {
@@ -96,6 +97,9 @@ export const getAllItems = async (req: Request, res: Response) => {
   }
 };
 
+// *************************** Item Api end
+
+// *************************** Events Api start
 // Add Event
 export const addEvent = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -149,7 +153,9 @@ export const getAllEvents = async (req: Request, res: Response) => {
   }
 };
 
-// Cuisine Apis start
+// ************************** Events Api end
+
+// ***************************** Cuisine Apis start
 
 // add cuisine api
 export const addCuisine = async (
@@ -189,19 +195,65 @@ export const addCuisine = async (
 };
 
 // get all cuisines api
-export  const getAllCuisines=async (req:Request,res:Response)=>{
-   try{
-   const allCuisines=await Cuisine.find({});
-   res.status(201).json({ message: "All Events Fetched Successfully.", data: allCuisines });
-   }
-   catch(error){
-    console.log("Error in Fetching Cuisines: ",error);
-      
+export const getAllCuisines = async (req: Request, res: Response) => {
+  try {
+    const allCuisines = await Cuisine.find({});
+    res
+      .status(201)
+      .json({ message: "All Events Fetched Successfully.", data: allCuisines });
+  } catch (error) {
+    console.log("Error in Fetching Cuisines: ", error);
+
     res.status(500).json({ message: error });
-   }
+  }
+};
 
+// ****************************************  Cuisine APi end
 
-}
+// ****************************************  DishCategory api start
+// Add DishCategory Api
+export const addDishCategory = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { categoryName } = req.body;
 
+    // Create new event
+    const newDishCategory = new DishCategory({
+      categoryName,
+    });
 
-// Cuisine APi end
+    const savedDishCategory = await newDishCategory.save();
+    res
+      .status(201)
+      .json({
+        message: "Dish Category Added Successfully.",
+        data: savedDishCategory,
+      });
+  } catch (error) {
+    console.error("Error adding Dish Category:", error);
+    res
+      .status(500)
+      .json({ message: "Server error while adding dish category" });
+  }
+};
+
+// get all DishCategory
+export const getAllDishCategory = async (req: Request, res: Response) => {
+  try {
+    const allDishCategory = await DishCategory.find({});
+    res
+      .status(201)
+      .json({
+        message: "All Dish Category Fetched Successfully.",
+        data: allDishCategory,
+      });
+  } catch (error) {
+    console.log("Error in Fetching Dish Category: ", error);
+
+    res.status(500).json({ message: error });
+  }
+};
+
+//  ***************************************  DishCategory api end

@@ -5,7 +5,7 @@ import {generateToken} from "../utils/generateToken.js";
 import { Types } from "mongoose";
 export const register = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { username, email, password, role } = req.body;
+    const { username, email,phone, password, role } = req.body;
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       res.status(400).json({ message: "User already exists!" });
@@ -16,6 +16,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     const newUser = new User({
       username,
       email,
+      phone,
       password: hashedPassord,
       role,
     });
@@ -32,6 +33,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
         id: newUser._id,
         username: newUser.username,
         email: newUser.email,
+        phone:newUser.phone,
         role: newUser.role,
       },
     });
@@ -67,6 +69,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         id: user._id,
         username: user.username,
         email: user.email,
+        phone:user.phone,
         role: user.role,
       },
     });

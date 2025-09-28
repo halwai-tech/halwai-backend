@@ -4,6 +4,8 @@ import {
   AddItemSchema,
   AddEventSchema,
   AddCuisineSchema,
+  AddDishCategorySchema,
+  AddDishSchema
 } from "../utils/validators/admin.validation.js";
 import { validate } from "../utils/middlewares/zodValidate.middleware.js";
 import {
@@ -15,12 +17,15 @@ import {
   getAllEvents,
   addCuisine,
   getAllCuisines,
+  addDishCategory,
+  getAllDishCategory,
 } from "../controllers/admin.controller.js";
 import {
   authenticateJWT,
   authorizeRoles,
 } from "../utils/middlewares/auth.middleware.js";
 import multer from "multer";
+
 
 // admin Router
 const adminRouter = Router();
@@ -74,6 +79,8 @@ adminRouter.post(
 adminRouter.get("/all-events", getAllEvents);
 
 // ++++++++++++++++++ Event Apis end
+
+// ++++++++++++++++++ Cuisine Apis start
 // add new cuisines api
 adminRouter.post(
   "/add-cuisine",
@@ -88,9 +95,44 @@ adminRouter.post(
 // get all cuisines api
 adminRouter.get("/get-cuisine",getAllCuisines);
 
-// ++++++++++++++++++ Cuisine Apis start
 
 
 //  +++++++++++++++++ Cuisine APis End
+
+// ++++++++++++++++++ DishCategory Api Start
+
+// add new Dish Category api
+adminRouter.post(
+  "/add-dish-category",
+  authenticateJWT,
+  authorizeRoles("admin"),
+  validate(AddDishCategorySchema),
+  addDishCategory
+);
+
+
+// get all Dish Category api
+adminRouter.get("/get-dish-category",getAllDishCategory);
+
+
+// ++++++++++++++++++ DishCategory Api End
+
+// ++++++++++++++++++ Dish Apis start
+// add new Dish api
+adminRouter.post(
+  "/add-dish",
+  authenticateJWT,
+  authorizeRoles("admin"),
+  upload.single("image"),
+  validate(AddDishSchema),
+  addCuisine
+);
+
+
+// get all Dish api
+adminRouter.get("/get-dish",getAllCuisines);
+
+
+//  +++++++++++++++++ Dish APis End
 
 export default adminRouter;

@@ -2,7 +2,9 @@ import EventCategory from "../models/EventCategory.js";
 import Item from "../models/Item.model.js";
 import Event from "../models/event.model.js";
 import Cuisine from "../models/Cuisine.model.js";
+import DishCategory from "../models/DishCategory.model.js";
 import { uploadToCloudinary } from "../utils/uploadCloudinary.js";
+// ****************** EventCategory Api start
 // Adding New Category
 export const addEventCategory = async (req, res) => {
     try {
@@ -19,9 +21,7 @@ export const addEventCategory = async (req, res) => {
             image: uploadResult.secure_url,
         });
         await eventCategory.save();
-        res
-            .status(201)
-            .json({
+        res.status(201).json({
             message: "Added New Category Successfully.",
             data: eventCategory,
         });
@@ -35,9 +35,7 @@ export const addEventCategory = async (req, res) => {
 export const getAllEventCategory = async (req, res) => {
     try {
         const eventCategory = await EventCategory.find({});
-        res
-            .status(200)
-            .json({
+        res.status(200).json({
             message: "All Categories Fetched Successfully.",
             data: eventCategory,
         });
@@ -47,6 +45,8 @@ export const getAllEventCategory = async (req, res) => {
         res.status(500).json({ message: error });
     }
 };
+// ******************* EventCategory Api End
+// ****************  Item Api start
 // Adding New Item
 export const addItem = async (req, res) => {
     try {
@@ -81,6 +81,8 @@ export const getAllItems = async (req, res) => {
         res.status(500).json({ message: error });
     }
 };
+// *************************** Item Api end
+// *************************** Events Api start
 // Add Event
 export const addEvent = async (req, res) => {
     try {
@@ -123,7 +125,8 @@ export const getAllEvents = async (req, res) => {
         res.status(500).json({ message: error });
     }
 };
-// Cuisine Apis start
+// ************************** Events Api end
+// ***************************** Cuisine Apis start
 // add cuisine api
 export const addCuisine = async (req, res) => {
     try {
@@ -154,11 +157,54 @@ export const addCuisine = async (req, res) => {
 export const getAllCuisines = async (req, res) => {
     try {
         const allCuisines = await Cuisine.find({});
-        res.status(201).json({ message: "All Events Fetched Successfully.", data: allCuisines });
+        res
+            .status(201)
+            .json({ message: "All Events Fetched Successfully.", data: allCuisines });
     }
     catch (error) {
         console.log("Error in Fetching Cuisines: ", error);
         res.status(500).json({ message: error });
     }
 };
-// Cuisine APi end
+// ****************************************  Cuisine APi end
+// ****************************************  DishCategory api start
+// Add DishCategory Api
+export const addDishCategory = async (req, res) => {
+    try {
+        const { categoryName } = req.body;
+        // Create new event
+        const newDishCategory = new DishCategory({
+            categoryName,
+        });
+        const savedDishCategory = await newDishCategory.save();
+        res
+            .status(201)
+            .json({
+            message: "Dish Category Added Successfully.",
+            data: savedDishCategory,
+        });
+    }
+    catch (error) {
+        console.error("Error adding Dish Category:", error);
+        res
+            .status(500)
+            .json({ message: "Server error while adding dish category" });
+    }
+};
+// get all DishCategory
+export const getAllDishCategory = async (req, res) => {
+    try {
+        const allDishCategory = await DishCategory.find({});
+        res
+            .status(201)
+            .json({
+            message: "All Dish Category Fetched Successfully.",
+            data: allDishCategory,
+        });
+    }
+    catch (error) {
+        console.log("Error in Fetching Dish Category: ", error);
+        res.status(500).json({ message: error });
+    }
+};
+//  ***************************************  DishCategory api end
