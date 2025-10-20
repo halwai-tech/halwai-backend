@@ -4,7 +4,7 @@ const usersRouter=Router();
 
 usersRouter.get("/",getAllUsers);
 
-usersRouter.get("/:roles",getUsersByRoles);
+usersRouter.get("/:role",getUsersByRoles);
 
 export default usersRouter;
 

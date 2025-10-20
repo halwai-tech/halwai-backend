@@ -140,7 +140,13 @@ export const addEvent = async (req: Request, res: Response): Promise<void> => {
 // get all Events
 export const getAllEvents = async (req: Request, res: Response) => {
   try {
-    const allEvents = await Event.find({});
+     const allEvents = await Event.find({})
+      .populate({
+        path: "categories",      
+        select: "eventCategoryName",         
+      })
+      .lean(); 
+
     res
       .status(201)
       .json({ message: "All Events Fetched Successfully.", data: allEvents });

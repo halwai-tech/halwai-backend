@@ -116,3 +116,68 @@ export async function submitContactDetails(req, res) {
     }
 }
 // Submit Contact Form Enquiry End
+export async function getAllEnquiry(req, res) {
+    try {
+        // Extract independent page values for each type
+        const domesticPage = parseInt(req.query.domesticPage) || 1;
+        const monthlyPage = parseInt(req.query.monthlyPage) || 1;
+        const professionalPage = parseInt(req.query.professionalPage) || 1;
+        // Optional: one shared limit, or you can split into domesticLimit etc.
+        const limit = parseInt(req.query.limit) || 10;
+        // Calculate skips individually
+        const domesticSkip = (domesticPage - 1) * limit;
+        const monthlySkip = (monthlyPage - 1) * limit;
+        const professionalSkip = (professionalPage - 1) * limit;
+        // Count total documents
+        const [domesticCount, monthlyCount, professionalCount] = await Promise.all([
+            DomesticChefEnquiry.countDocuments(),
+            MonthlyChefEnquiry.countDocuments(),
+            ProfessionalChefEnquiry.countDocuments(),
+        ]);
+        // Fetch paginated data in parallel
+        const [domestic, monthly, professional] = await Promise.all([
+            DomesticChefEnquiry.find()
+                .sort({ createdAt: -1 })
+                .skip(domesticSkip)
+                .limit(limit),
+            MonthlyChefEnquiry.find()
+                .sort({ createdAt: -1 })
+                .skip(monthlySkip)
+                .limit(limit),
+            ProfessionalChefEnquiry.find()
+                .sort({ createdAt: -1 })
+                .skip(professionalSkip)
+                .limit(limit),
+        ]);
+        // Send structured response
+        res.json({
+            success: true,
+            pagination: {
+                domestic: {
+                    page: domesticPage,
+                    total: domesticCount,
+                    totalPages: Math.ceil(domesticCount / limit),
+                },
+                monthly: {
+                    page: monthlyPage,
+                    total: monthlyCount,
+                    totalPages: Math.ceil(monthlyCount / limit),
+                },
+                professional: {
+                    page: professionalPage,
+                    total: professionalCount,
+                    totalPages: Math.ceil(professionalCount / limit),
+                },
+            },
+            data: {
+                domestic,
+                monthly,
+                professional,
+            },
+        });
+    }
+    catch (error) {
+        console.error('Error fetching enquiries:', error);
+        res.status(500).json({ success: false, message: 'Server Error' });
+    }
+}

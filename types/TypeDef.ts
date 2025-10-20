@@ -114,3 +114,13 @@ export interface IContactEnquiry extends Document {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface IAddHalwai extends Document {
+  name: string;
+  phone: string;
+  address: string;
+  image?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+

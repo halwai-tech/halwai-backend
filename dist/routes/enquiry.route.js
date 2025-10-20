@@ -1,5 +1,5 @@
 import express from "express";
-import { addProfessionalChefEnquiry, getProfessionalChefEnquiry } from "../controllers/enquiry.controller.js";
+import { addProfessionalChefEnquiry, getAllEnquiry, getProfessionalChefEnquiry } from "../controllers/enquiry.controller.js";
 import { addMonthlyChefEnquiry, getMonthlyChefEnquiry } from "../controllers/enquiry.controller.js";
 import { addDomesticChefEnquiry, getDomesticChefEnquiry, submitContactDetails } from "../controllers/enquiry.controller.js";
 import { validate } from "../utils/middlewares/zodValidate.middleware.js";
@@ -20,4 +20,6 @@ router.get("/domestic-chef-enquiry", getDomesticChefEnquiry);
 // contact form api start
 router.post("/contact-form-enquiry", validate(ContactFormSchema), submitContactDetails);
 // contact form api end
+// get all enquiry
+router.get("/all-enquiry", getAllEnquiry);
 export default router;
